@@ -20,6 +20,12 @@ void* addToHashTable(Node** table, int item, int tableSize);
 
 void* print_HashTable(Node** table, int tableSize);
 
-Set initHashTable(int size);
+Set* initHashTable(int size);
 
-void destroyHashTable(Set set);
+void destroyHashTable(Set* set);
+
+int isSetEqual(Set* set1, Set* set2);
+
+void* setAppend(Set* set, int item);
+
+Set* getSubset(Set* set, int (*filter)(int));

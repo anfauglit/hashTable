@@ -69,24 +69,71 @@ void* print_HashTable(Node** table, int tableSize)
 			print_list(table[i]);
 }
 
-Set initHashTable(int size)
+Set* initHashTable(int size)
 {
-	Set set;
-	set.table = malloc(sizeof(Node*)*size);
-	for (int i = 0; i < size; ++i)
-		set.table[i] = NULL;
+	Set* set = malloc(sizeof(Set));
 
-	set.size = size;
-	set.numElements = 0;
+	set->table = malloc(sizeof(Node*)*size);
+	for (int i = 0; i < size; ++i)
+		set->table[i] = NULL;
+
+	set->size = size;
+	set->numElements = 0;
 
 	return set;
 }
 
-void destroyHashTable(Set set)
+void destroyHashTable(Set* set)
 {
-	for (int i = 0; i < set.size; ++i)
-		if (set.table[i] != NULL)
-			destroy_list(set.table[i]);
+	for (int i = 0; i < set->size; ++i)
+		if (set->table[i] != NULL)
+			destroy_list(set->table[i]);
 
-	free(set.table);
+	free(set->table);
+	free(set);
+}
+
+int isSetEqual(Set* set1, Set* set2)
+{
+	if (set1->numElements != set2->numElements)
+		return 1;
+	
+	Node* node;
+	for (int i = 0; i < set1->size; ++i) {
+		node = set1->table[i];
+		while (node != NULL) {
+			if (searchHashTable(set2->table, node->data, set2->size) == NULL)
+				return 1;
+			node = node->next;
+		}
+	}
+
+	return 0;
+}
+
+void* setAppend(Set* set, int item)
+{
+	int hash = item % set->size;
+
+	set->table[hash] = add_item(set->table[hash], item);
+
+	set->numElements++;
+}
+
+Set* getSubset(Set* set, int (*filter)(int))
+{
+	Set* oSet = initHashTable(set->size);	
+
+	Node* node; 
+
+	for (int i = 0; i < set->size; ++i) {
+		node = set->table[i];
+		while (node != NULL) {
+			if ((*filter)(node->data) == 0)
+				setAppend(oSet, node->data);
+			node = node->next;
+		}
+	}
+		
+	return oSet;
 }
