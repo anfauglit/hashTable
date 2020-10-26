@@ -8,16 +8,18 @@ struct node {
 	Node* next;
 };
 
-Node* add_item(Node* head, int item);
-
-Node* search_item(Node* head, int item);
-
-void print_list(Node* head);
-
-void destroy_list(Node* head);
+typedef struct {
+	Node** table;
+	int size;
+	int numElements;
+} Set;
 
 Node* searchHashTable(Node** table, int item, int tableSize);
 
 void* addToHashTable(Node** table, int item, int tableSize);
 
 void* print_HashTable(Node** table, int tableSize);
+
+Set initHashTable(int size);
+
+void destroyHashTable(Set set);

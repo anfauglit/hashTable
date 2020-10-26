@@ -1,14 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "list.h"
 
-typedef struct node Node;
-
-struct node {
-	int data;
-	Node* next;
-};
-
-Node* add_item(Node* head, int item)
+static Node* add_item(Node* head, int item)
 {
 	Node* node;
 	node = malloc(sizeof(Node));
@@ -22,7 +16,7 @@ Node* add_item(Node* head, int item)
 	return node;
 }
 
-Node* search_item(Node* head, int item)
+static Node* search_item(Node* head, int item)
 {
 	if (head == NULL)
 		return NULL;
@@ -32,7 +26,7 @@ Node* search_item(Node* head, int item)
 	return search_item(head->next, item);
 }
 
-void print_list(Node* head)
+static void print_list(Node* head)
 {
 	if (head != NULL) {
 		printf("%i ", head->data);
@@ -40,7 +34,7 @@ void print_list(Node* head)
 	}
 }
 
-void destroy_list(Node* head)
+static void destroy_list(Node* head)
 {
 	if (head != NULL) {
 		destroy_list(head->next);
@@ -73,4 +67,26 @@ void* print_HashTable(Node** table, int tableSize)
 	for (int i = 0; i < tableSize; ++i)
 		if (table[i] != NULL)
 			print_list(table[i]);
+}
+
+Set initHashTable(int size)
+{
+	Set set;
+	set.table = malloc(sizeof(Node*)*size);
+	for (int i = 0; i < size; ++i)
+		set.table[i] = NULL;
+
+	set.size = size;
+	set.numElements = 0;
+
+	return set;
+}
+
+void destroyHashTable(Set set)
+{
+	for (int i = 0; i < set.size; ++i)
+		if (set.table[i] != NULL)
+			destroy_list(set.table[i]);
+
+	free(set.table);
 }

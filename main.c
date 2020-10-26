@@ -1,22 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
-#define TABLE_SIZE 5
+#define TABLE_SIZE 10
 
 int main (void)
 {
-	Node* hashTable[TABLE_SIZE] = {NULL};
+	Set set1;
 
-	Node* list = NULL;
+	set1 = initHashTable(TABLE_SIZE);
 
 	for (int i = 0; i < 19; ++i)
-		addToHashTable(hashTable, i, TABLE_SIZE);
+		addToHashTable(set1.table, i, set1.size);
 
-	print_HashTable(hashTable, TABLE_SIZE);
+	print_HashTable(set1.table, set1.size);
 	printf("\n");
 	
-	printf("Is %i in the list? A: %c\n", 3, searchHashTable(hashTable, 3, TABLE_SIZE) == NULL ? 'n' : 'y');
-	printf("Is %i in the list? A: %c\n", 112, searchHashTable(hashTable, 112, TABLE_SIZE) == NULL ? 'n' : 'y');
+	printf("Is %i in the list? A: %c\n", 3, searchHashTable(set1.table, 3, set1.size) == NULL ? 'n' : 'y');
+	printf("Is %i in the list? A: %c\n", 112, searchHashTable(set1.table, 112, set1.size) == NULL ? 'n' : 'y');
+
+	destroyHashTable(set1);
+
 	return 0;
 }
 
