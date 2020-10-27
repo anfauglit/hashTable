@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
@@ -26,6 +27,14 @@ static Node* search_item(Node* head, int item)
 	return search_item(head->next, item);
 }
 
+static int getHash(int n, int size)
+{
+	if (n >= 0)
+		return n % size;
+	else
+		return n * -1 % size;
+}
+
 static void print_list(Node* head)
 {
 	if (head != NULL) {
@@ -45,7 +54,7 @@ static void destroy_list(Node* head)
 Node* searchHashTable(Node** table, int item, int tableSize)
 {
 	Node* node;
-	node = table[item % tableSize];
+	node = table[getHash(item, tableSize)];
 	while (node != NULL) {
 		if (node->data == item)
 			return node;
@@ -57,7 +66,7 @@ Node* searchHashTable(Node** table, int item, int tableSize)
 
 void* addToHashTable(Node** table, int item, int tableSize)
 {
-	int hash = item % tableSize;
+	int hash = getHash(item, tableSize); 
 
 	table[hash] = add_item(table[hash], item);
 }
@@ -113,7 +122,7 @@ int isSetEqual(Set* set1, Set* set2)
 
 void* setAppend(Set* set, int item)
 {
-	int hash = item % set->size;
+	int hash = getHash(item, set->size); 
 
 	set->table[hash] = add_item(set->table[hash], item);
 
@@ -135,5 +144,49 @@ Set* getSubset(Set* set, int (*filter)(int))
 		}
 	}
 		
+	return oSet;
+}
+
+Set* getUnion(Set* set1, Set* set2)
+{
+	Set* oSet;
+	oSet = setDeepCopy(set1);
+
+	Node* node;
+
+	for (int i = 0; i < set2->size; ++i) {
+		node = set2->table[i];
+		while (node != NULL) {
+			if (searchHashTable(oSet->table, node->data, oSet->size) == NULL)
+				setAppend(oSet, node->data);
+			node = node->next;
+		}
+	}
+
+	return oSet;
+}
+
+Set* setDeepCopy(Set* iSet)
+{
+	Set* oSet = malloc(sizeof(Set));
+	memcpy(oSet, iSet, sizeof(Set));
+	oSet->table = malloc(sizeof(Node*)*(oSet->size));
+
+	Node* node, *oNode;
+
+	for (int i = 0; i < iSet->size; ++i) {
+		node = iSet->table[i];
+		if (node == NULL)
+			oSet->table[i] = NULL;
+		else {
+			oSet->table[i] = NULL;
+			while (node != NULL) {
+				oSet->table[i] = add_item(oSet->table[i], node->data);
+				node = node->next;
+			}
+
+		}
+	}
+
 	return oSet;
 }

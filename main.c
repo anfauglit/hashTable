@@ -13,16 +13,14 @@ int isEven (int x)
 
 int main (void)
 {
-	Set* set1;
-	Set* set2;
-	Set* set3;
+	Set* set1, *set2, *set3, *set4;
 
 	set1 = initHashTable(TABLE_SIZE);
 	set2 = initHashTable(TABLE_SIZE);
 
-	for (int i = 0; i < 19; ++i)
+	for (int i = 0; i < 5; ++i)
 		setAppend(set1, i);
-	for (int i = 1; i < 19; ++i)
+	for (int i = -5; i < 0; ++i)
 		setAppend(set2, i);
 	
 	printf("Are sets equal? A: %i\n", isSetEqual(set1, set2));
@@ -39,10 +37,21 @@ int main (void)
 
 	print_HashTable(set3->table, set3->size);
 	printf("\n");
+	
+	set4 = setDeepCopy(set2);
+	print_HashTable(set4->table, set4->size);
+	printf("\n");
+
+	Set* set5 = getUnion(set1, set2);
+	print_HashTable(set5->table, set5->size);
+	printf("\n");
+
 
 	destroyHashTable(set1);
 	destroyHashTable(set2);
 	destroyHashTable(set3);
+	destroyHashTable(set4);
+	destroyHashTable(set5);
 
 	return 0;
 }

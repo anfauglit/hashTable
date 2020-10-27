@@ -29,3 +29,7 @@ int isSetEqual(Set* set1, Set* set2);
 void* setAppend(Set* set, int item);
 
 Set* getSubset(Set* set, int (*filter)(int));
+
+Set* getUnion(Set* set1, Set* set2);
+
+Set* setDeepCopy(Set* iSet);
