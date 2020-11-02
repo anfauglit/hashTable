@@ -3,13 +3,24 @@
 #include <errno.h>
 #include <string.h>
 
-typedef enum {int_t} dType;
+typedef union {
+	int ival;
+	double fval;
+} Variable;
+
+typedef enum {int_t, double_t, tuple_t} dType;
 
 typedef struct slist {
 	void *data;
 	struct slist *next;
 } SLIST;
 
-int addBack(SLIST** head, void* item, size_t itemSize);
+typedef struct tuple {
+	dType type;
+	Variable x;
+	Variable y;
+} Tuple;
+
+int addBack(SLIST** head, void* item, dType varType);
 
 void printList(SLIST **head, dType varType);
