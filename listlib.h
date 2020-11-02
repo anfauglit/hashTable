@@ -24,3 +24,5 @@ typedef struct tuple {
 int addBack(SLIST** head, void* item, dType varType);
 
 void printList(SLIST **head, dType varType);
+
+void destroyList(SLIST **head);

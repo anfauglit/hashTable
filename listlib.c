@@ -60,3 +60,15 @@ static void printNode(SLIST *node, dType varType)
 			break;
 	}
 }
+
+void destroyList(SLIST **head)
+{
+	SLIST *node = *head;
+
+	while (node != NULL) {
+		free(node->data);
+		*head = node;
+		node = node->next;
+		free(*head);
+	}
+}
