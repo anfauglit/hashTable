@@ -21,8 +21,10 @@ typedef struct tuple {
 	Variable y;
 } Tuple;
 
-int addBack(SLIST** head, void* item, dType varType);
+int addFront(SLIST** head, void* item, dType varType);
 
 void printList(SLIST **head, dType varType);
 
-void destroyList(SLIST **head);
+void freeList(SLIST **head);
+
+int removeNode(SLIST** head, void* item, dType varType);
